@@ -1,4 +1,6 @@
 import type { FastifyInstance } from 'fastify';
+import * as loginController from '@/controllers/login.controller';
+import * as isAuthController from '@/controllers/is-auth.controller';
 import * as chartController from '@/controllers/chart.controller';
 import * as weatherController from '@/controllers/weather.controller';
 import * as statsController from '@/controllers/stats.controller';
@@ -32,6 +34,10 @@ export async function registerRoutes(app: FastifyInstance) {
     });
   });
 
+  // Auth route
+  app.post('/api/login', loginController.login);
+  app.get('/api/me', { preHandler: [app.authenticate] }, isAuthController.isAuthCheck);
+
   // Chart routes
   app.get('/api/chart-data', chartController.getChartData);
   app.get('/api/monthly-data', chartController.getMonthlyData);
@@ -51,7 +57,8 @@ export async function registerRoutes(app: FastifyInstance) {
 
   // User routes (CRUD)
   app.get('/api/users', userController.getUsers);
-  app.get('/api/users/:id', userController.getUserById);
+  // app.get('/api/users/:id', userController.getUserById);
+  app.get('/api/users/:id', { preHandler: [app.authenticate] }, userController.getUserById);
   app.post('/api/users', userController.createUser);
   app.put('/api/users/:id', userController.updateUser);
   app.delete('/api/users/:id', userController.deleteUser);

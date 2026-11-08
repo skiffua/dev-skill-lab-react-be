@@ -56,4 +56,5 @@ export interface Config {
   nodeEnv: string;
   corsOrigin: string;
   apiPrefix: string;
+  jwtSecret: string;
 }

@@ -1,8 +1,12 @@
 import Fastify from 'fastify';
+import fastifyJwt from '@fastify/jwt';
+import fastifyCookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import { config, isDevelopment } from '@/config';
 import { registerRoutes } from '@/routes';
+
+import authPlugin from './plugins/auth';
 
 export async function buildApp() {
   // Create Fastify instance
@@ -21,6 +25,14 @@ export async function buildApp() {
         : undefined,
     },
   });
+
+  await app.register(fastifyJwt, {
+    secret: config.jwtSecret,
+  });
+
+  await app.register(authPlugin);
+
+  await app.register(fastifyCookie);
 
   // Register helmet for security headers
   await app.register(helmet, {
