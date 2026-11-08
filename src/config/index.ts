@@ -18,5 +18,7 @@ export const config: Config = {
   jwtSecret: process.env.JWT_SECRET || '',
 };
 
+console.error('Config loaded', config);
+
 export const isDevelopment = config.nodeEnv === 'development';
 export const isProduction = config.nodeEnv === 'production';
