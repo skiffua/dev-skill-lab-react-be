@@ -37,6 +37,6 @@ export const login = async (
 
   reply
     .code(200)
-    .setCookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' })
+    .setCookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' })
     .send(response);
 };
